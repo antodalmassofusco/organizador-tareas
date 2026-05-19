@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import pool from './db/connection';
 import authRoutes from './routes/authRoutes';
@@ -12,8 +13,17 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middlewares
+// Middlewares
+app.use(cors({
+  origin: [
+    'http://localhost:5173',           // Para cuando programás local
+    'https://devtask-web.onrender.com' // Tu frontend en Render
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 // Rutas
 app.use('/api/auth', authRoutes);
