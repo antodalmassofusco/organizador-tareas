@@ -229,9 +229,8 @@ const Sidebar = ({
         style={{ background: '#0F172A' }}
       >
         {/* Logo */}
-        <div className="px-6 py-6 flex items-center gap-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-          <LogoIcon />
-          <span className="text-white font-bold tracking-widest text-base select-none" style={{ letterSpacing: '0.15em' }}>DEVTASK</span>
+        <div className="px-5 py-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <img src="/devtask-logo.png" alt="DevTask" className="h-9 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
         </div>
 
         {/* Usuario */}
@@ -276,11 +275,8 @@ const Sidebar = ({
         </div>
 
         {/* Footer DevTask */}
-        <div className="px-6 py-5" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-          <div className="flex items-center gap-2">
-            <LogoIcon />
-            <span className="text-white font-bold tracking-widest text-sm select-none" style={{ letterSpacing: '0.15em' }}>DEVTASK</span>
-          </div>
+        <div className="px-5 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <img src="/devtask-logo.png" alt="DevTask" className="h-7 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
         </div>
       </aside>
     </>
