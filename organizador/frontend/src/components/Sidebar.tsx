@@ -12,7 +12,7 @@ interface Props {
   nombreUsuario: string;
 }
 
-const COLORES = ['#14B8A6', '#2563EB', '#F59E0B', '#EF4444', '#8B5CF6', '#10B981'];
+const COLORES = ['#14B8A6', '#2563EB', '#F59E0B', '#EF4444', '#8B5CF6', '#10B981', '#EC4899', '#06B6D4', '#F97316', '#6366F1', '#84CC16'];
 
 // Ícono carpeta SVG outline (estilo line)
 const IconCarpeta = ({ color = '#14B8A6', size = 16 }: { color?: string; size?: number }) => (

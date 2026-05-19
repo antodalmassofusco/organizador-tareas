@@ -213,13 +213,15 @@ const TareaItem = ({ tarea, color, onCambiarEstado, onEliminar, onActualizar }: 
   const [fecha, setFecha] = useState(formatFechaInput(tarea.fecha_vencimiento));
 
   const estiloTexto = () => {
-    if (tarea.estado === 'EN_PROGRESO') return 'underline decoration-yellow-400 decoration-2';
-    if (tarea.estado === 'COMPLETADA') return 'line-through decoration-red-500 opacity-50';
-    return '';
+    if (tarea.estado === 'EN_PROGRESO') {
+      return { textDecoration: 'underline', textDecorationColor: color, textDecorationThickness: '2px' };
+    }
+    if (tarea.estado === 'COMPLETADA') return { textDecoration: 'line-through', opacity: 0.5 };
+    return {};
   };
 
   const badge = () => {
-    if (tarea.estado === 'EN_PROGRESO') return <span className="text-[10px] bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded-full font-semibold">En progreso</span>;
+    if (tarea.estado === 'EN_PROGRESO') return <span className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold text-white" style={{ backgroundColor: color + '20', color: color }}>En progreso</span>;
     if (tarea.estado === 'COMPLETADA') return <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-semibold">Completada</span>;
     return <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-full font-semibold">Pendiente</span>;
   };
@@ -258,7 +260,7 @@ const TareaItem = ({ tarea, color, onCambiarEstado, onEliminar, onActualizar }: 
           style={{ borderColor: color, backgroundColor: tarea.estado === 'COMPLETADA' ? color : 'transparent' }}
         />
         <button onClick={() => setExpandida(!expandida)} className="flex-1 text-left min-w-0">
-          <p className={`text-sm text-slate-700 font-medium truncate ${estiloTexto()}`}>{tarea.titulo}</p>
+          <p className="text-sm text-slate-700 font-medium truncate" style={estiloTexto()}>{tarea.titulo}</p>
           {tarea.fecha_vencimiento && (
             <p className={`text-[10px] mt-0.5 font-medium ${vencColor()}`}>
               📅 {formatFecha(tarea.fecha_vencimiento)} · {vencimiento}
@@ -372,7 +374,7 @@ const DashboardPage = () => {
   const [errorEliminarCarpeta, setErrorEliminarCarpeta] = useState('');
   const [panelDerechoAbierto, setPanelDerechoAbierto] = useState(false);
 
-  const COLORES = ['#14B8A6', '#2563EB', '#F59E0B', '#EF4444', '#8B5CF6', '#10B981'];
+  const COLORES = ['#14B8A6', '#2563EB', '#F59E0B', '#EF4444', '#8B5CF6', '#10B981', '#EC4899', '#06B6D4', '#F97316', '#6366F1', '#84CC16'];
 
   useEffect(() => {
     getCarpetas().then(setCarpetas);
