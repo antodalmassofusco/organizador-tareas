@@ -9,7 +9,7 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': 'http://localhost:3000'
+      '/api': 'https://devtask-00p5.onrender.com'
     }
   }
 })
