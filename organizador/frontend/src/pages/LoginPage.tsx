@@ -23,7 +23,7 @@ const LoginPage = () => {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex justify-center mb-10">
-          <img src="/logo-devtask.png" alt="DevTask" className="h-16 object-contain" />
+          <img src="/logo-devtask.png" alt="DevTask" className="h-64 object-contain" />
         </div>
 
         {/* Tarjeta */}
