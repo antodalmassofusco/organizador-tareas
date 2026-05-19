@@ -5,7 +5,8 @@ import type { Usuario } from '../types/index';
 export const useAuth = () => {
   const [usuario, setUsuario] = useState<Usuario | null>(() => {
     const guardado = localStorage.getItem('usuario');
-    return guardado ? JSON.parse(guardado) : null;
+    // Sumamos la validación por si quedó guardado el texto "undefined"
+    return guardado && guardado !== 'undefined' ? JSON.parse(guardado) : null;
   });
 
   const [cargando, setCargando] = useState(false);
