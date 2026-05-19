@@ -270,7 +270,7 @@ const Sidebar = ({
 
         {/* Footer DevTask */}
         <div className="px-5 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-          <img src="/logo-devtask.png" alt="DevTask" className="w-8 h-auto" />
+          <img src="/logo-devtask.png" alt="DevTask" className="w-24 h-auto object-contain mx-auto" />
         </div>
       </aside>
     </>
