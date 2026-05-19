@@ -7,6 +7,7 @@ const LoginPage = () => {
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [mostrarPassword, setMostrarPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -14,15 +15,24 @@ const LoginPage = () => {
     if (modo === 'login') {
       await login(email, password);
     } else {
+      if (password !== passwordConfirm) {
+        alert('Las contraseñas no coinciden');
+        return;
+      }
       await registro(nombre, email, password);
     }
   };
+
+  const passwordsMatch = password === passwordConfirm;
+  const formValid = modo === 'login' 
+    ? email && password 
+    : nombre && email && password && passwordConfirm && passwordsMatch;
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6 py-8" style={{ background: '#F7F8FA' }}>
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="flex justify-center mb-10">
+        <div className="flex justify-center mb-4">
           <img src="/logo-devtask.png" alt="DevTask" className="h-64 object-contain" />
         </div>
 
@@ -118,9 +128,35 @@ const LoginPage = () => {
               </div>
             </div>
 
+            {modo === 'registro' && (
+              <div>
+                <label className="text-sm font-medium block mb-2" style={{ color: '#0F172A' }}>Confirmar contraseña</label>
+                <div className={`flex items-center px-4 py-3 rounded-lg border transition-colors ${
+                  passwordConfirm && !passwordsMatch ? 'border-red-300 bg-red-50' : ''
+                }`} style={{ borderColor: passwordConfirm && !passwordsMatch ? '#FCA5A5' : '#E2E8F0', background: passwordConfirm && !passwordsMatch ? '#FEE2E2' : '#F7F8FA' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={passwordConfirm && !passwordsMatch ? '#DC2626' : '#94A3B8'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                  <input
+                    type={mostrarPassword ? 'text' : 'password'}
+                    value={passwordConfirm}
+                    onChange={(e) => setPasswordConfirm(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    className="flex-1 ml-3 text-sm focus:outline-none bg-transparent"
+                    style={{ color: '#0F172A' }}
+                  />
+                </div>
+                {passwordConfirm && !passwordsMatch && (
+                  <p className="text-xs mt-1" style={{ color: '#DC2626' }}>Las contraseñas no coinciden</p>
+                )}
+              </div>
+            )}
+
             <button
               type="submit"
-              disabled={cargando}
+              disabled={cargando || !formValid}
               className="w-full font-semibold py-3 rounded-lg text-white transition-colors disabled:opacity-60"
               style={{ background: '#14B8A6' }}
             >
@@ -136,6 +172,8 @@ const LoginPage = () => {
                 setNombre('');
                 setEmail('');
                 setPassword('');
+                setPasswordConfirm('');
+                setMostrarPassword(false);
               }}
               className="font-medium hover:underline transition-colors"
               style={{ color: '#14B8A6' }}
