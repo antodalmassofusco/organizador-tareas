@@ -75,9 +75,9 @@ const Sidebar = ({
 
   const confirmarEdicion = async () => {
     if (editandoId === null) return;
-    const nombre = editandoNombre.trim();
-    if (nombre && nombre.length <= 15) {
-      await onRenombrarCarpeta(editandoId, nombre);
+    const fontNombre = editandoNombre.trim();
+    if (fontNombre && fontNombre.length <= 15) {
+      await onRenombrarCarpeta(editandoId, fontNombre);
     }
     setEditandoId(null);
     setEditandoNombre('');
@@ -239,9 +239,16 @@ const Sidebar = ({
             {carpetasRaiz.map(c => renderCarpeta(c))}
           </div>
         </div>
+
+        {/* LOGO DEVTASK CLAVADO EN EL PISO CON POSICIÓN ABSOLUTA */}
+        <div className="absolute bottom-8 left-7 text-xl font-black text-slate-800 tracking-wider select-none">
+          Dev<span className="text-blue-600">Task</span>
+        </div>
+
       </aside>
     </>
   );
 };
+
 
 export default Sidebar;
