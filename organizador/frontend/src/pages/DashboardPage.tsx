@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { Carpeta, Tarea, Nota } from '../types/index';
-import { getCarpetas, crearCarpeta, eliminarCarpeta } from '../api/carpetas';
+import { getCarpetas, crearCarpeta, eliminarCarpeta, actualizarCarpeta } from '../api/carpetas';
 import { getTareas, crearTarea, actualizarTarea, eliminarTarea } from '../api/tareas';
 import { getNotaPorCarpeta, crearNota, actualizarNota } from '../api/notas';
 import Sidebar from '../components/Sidebar';
