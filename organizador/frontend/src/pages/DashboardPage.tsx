@@ -132,17 +132,17 @@ const MiniCalendario = ({ tareas }: { tareas: Tarea[] }) => {
 
   return (
     <div className="flex flex-col h-full select-none">
-      <div className="flex items-center justify-between px-7 py-5 border-b border-slate-50">
-        <button onClick={() => cambiarMes(-1)} className="w-6 h-6 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors">‹</button>
-        <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">{MESES[mes]} {anio}</span>
-        <button onClick={() => cambiarMes(1)} className="w-6 h-6 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors">›</button>
+      <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid #F1F5F9' }}>
+        <button onClick={() => cambiarMes(-1)} className="w-6 h-6 flex items-center justify-center rounded-lg transition-colors text-base font-bold" style={{ color: '#14B8A6' }}>‹</button>
+        <span className="text-xs font-bold uppercase tracking-wider" style={{ color: '#0F172A' }}>{MESES[mes]} {anio}</span>
+        <button onClick={() => cambiarMes(1)} className="w-6 h-6 flex items-center justify-center rounded-lg transition-colors text-base font-bold" style={{ color: '#14B8A6' }}>›</button>
       </div>
-      <div className="grid grid-cols-7 px-7 pt-4">
+      <div className="grid grid-cols-7 px-6 pt-3">
         {DIAS_SEMANA.map(d => (
-          <div key={d} className="text-center text-[10px] text-slate-400 font-bold py-1">{d}</div>
+          <div key={d} className="text-center text-[10px] font-bold py-1" style={{ color: '#94A3B8' }}>{d}</div>
         ))}
       </div>
-      <div className="grid grid-cols-7 px-7 pb-5">
+      <div className="grid grid-cols-7 px-6 pb-4">
         {celdas.map((dia, i) => {
           if (!dia) return <div key={`v-${i}`} />;
           const esHoy = dia === hoy.getDate() && mes === hoy.getMonth() && anio === hoy.getFullYear();
@@ -153,35 +153,43 @@ const MiniCalendario = ({ tareas }: { tareas: Tarea[] }) => {
               <button
                 type="button"
                 onClick={() => setDiaSeleccionado(dia)}
-                className={`w-6 h-6 flex items-center justify-center rounded-full text-[11px] font-medium transition-colors
-                ${esHoy ? 'bg-blue-600 text-white' : seleccionado ? 'bg-slate-200 text-slate-800' : 'text-slate-600 hover:bg-slate-100'}`}
+                className="w-6 h-6 flex items-center justify-center rounded-full text-[11px] font-medium transition-colors"
+                style={{
+                  background: esHoy ? '#14B8A6' : seleccionado ? '#E6FAF8' : 'transparent',
+                  color: esHoy ? '#fff' : seleccionado ? '#14B8A6' : '#475569'
+                }}
               >
                 {dia}
               </button>
               {tareasDia.length > 0 && (
-                <div className={`w-1 h-1 rounded-full mt-0.5 ${seleccionado ? 'bg-blue-500' : 'bg-red-400'}`} />
+                <div className="w-1 h-1 rounded-full mt-0.5" style={{ background: seleccionado ? '#14B8A6' : '#F59E0B' }} />
               )}
             </div>
           );
         })}
       </div>
-      <div className="border-t border-slate-50 px-7 py-5 min-h-28 max-h-36 overflow-y-auto">
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-          {diaSeleccionado ? `${diaSeleccionado} de ${MESES[mes]}` : 'Proximos vencimientos'}
-        </p>
+      <div className="px-6 py-4 min-h-28 max-h-36 overflow-y-auto" style={{ borderTop: '1px solid #F1F5F9' }}>
+        <div className="flex items-center gap-1.5 mb-2">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#64748B' }}>
+            {diaSeleccionado ? `${diaSeleccionado} de ${MESES[mes]}` : 'Pr\u00f3ximos vencimientos'}
+          </p>
+        </div>
         {tareasSeleccionadas.length > 0 ? (
           <div className="space-y-1.5">
             {tareasSeleccionadas.map(t => (
-              <div key={t.id} className="border-l-2 border-blue-200 pl-3">
-                <p className="text-xs text-slate-600 font-medium truncate">{t.titulo}</p>
+              <div key={t.id} className="border-l-2 pl-3" style={{ borderColor: '#14B8A6' }}>
+                <p className="text-xs font-medium truncate" style={{ color: '#0F172A' }}>{t.titulo}</p>
                 {t.fecha_vencimiento && (
-                  <p className="text-[10px] text-slate-400">{formatFecha(t.fecha_vencimiento)}</p>
+                  <p className="text-[10px]" style={{ color: '#94A3B8' }}>{formatFecha(t.fecha_vencimiento)}</p>
                 )}
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-xs text-slate-300 italic">Sin vencimientos</p>
+          <p className="text-xs italic" style={{ color: '#CBD5E1' }}>Sin vencimientos</p>
         )}
       </div>
     </div>
@@ -363,7 +371,7 @@ const DashboardPage = () => {
   const [eliminandoCarpeta, setEliminandoCarpeta] = useState(false);
   const [errorEliminarCarpeta, setErrorEliminarCarpeta] = useState('');
 
-  const COLORES = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c'];
+  const COLORES = ['#14B8A6', '#2563EB', '#F59E0B', '#EF4444', '#8B5CF6', '#10B981'];
 
   useEffect(() => {
     getCarpetas().then(setCarpetas);
@@ -523,34 +531,50 @@ const DashboardPage = () => {
 
   // Panel derecho: notas + calendario (compartido entre estado vacío y con carpeta)
   const renderPanelDerecho = () => (
-    <div className="w-80 flex-shrink-0 flex flex-col bg-white border-l border-slate-100 overflow-hidden">
+    <div className="w-80 flex-shrink-0 flex flex-col overflow-hidden" style={{ background: '#FFFFFF', borderLeft: '1px solid #E2E8F0' }}>
       {carpetaSeleccionada ? (
         <>
-            <div className="flex-1 flex flex-col border-b border-slate-100 overflow-hidden">
-            <div className="px-7 pt-7 pb-5 border-b border-slate-50">
-              <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Anotaciones</h2>
+          <div className="flex-1 flex flex-col overflow-hidden" style={{ borderBottom: '1px solid #E2E8F0' }}>
+            <div className="px-6 pt-6 pb-4" style={{ borderBottom: '1px solid #F8FAFC' }}>
+              <div className="flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                </svg>
+                <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: '#14B8A6' }}>Anotaciones</h2>
+              </div>
             </div>
             <textarea
               value={contenidoNota}
               onChange={e => setContenidoNota(e.target.value)}
-              placeholder="Escribí tus ideas..."
-              className="flex-1 px-7 py-7 text-sm text-slate-700 resize-none focus:outline-none placeholder-slate-300 leading-relaxed"
+              placeholder="Escrib\u00ed tus ideas..."
+              className="flex-1 px-6 py-5 text-sm resize-none focus:outline-none"
+              style={{ color: '#0F172A', background: '#FFFFFF' }}
             />
-            <div className="px-7 py-5 border-t border-slate-50 flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-              <p className="text-xs text-slate-400">Guardado automático</p>
+            <div className="px-6 py-3 flex items-center gap-1.5" style={{ borderTop: '1px solid #F8FAFC' }}>
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#14B8A6' }} />
+              <p className="text-xs" style={{ color: '#94A3B8' }}>Guardado autom\u00e1tico</p>
             </div>
           </div>
         </>
       ) : (
-        <div className="flex-shrink-0 px-7 py-7 border-b border-slate-100">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Anotaciones</p>
-          <p className="text-xs text-slate-300 italic">Seleccioná una carpeta para ver las notas</p>
+        <div className="flex-shrink-0 px-6 py-6" style={{ borderBottom: '1px solid #E2E8F0' }}>
+          <div className="flex items-center gap-2 mb-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#14B8A6' }}>Anotaciones</p>
+          </div>
+          <p className="text-xs italic" style={{ color: '#CBD5E1' }}>Selecion\u00e1 una carpeta para ver las notas</p>
         </div>
       )}
       <div className="flex-shrink-0">
-        <div className="px-7 pt-7 pb-4 border-b border-slate-50">
-          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Calendario</h2>
+        <div className="px-6 pt-5 pb-3" style={{ borderBottom: '1px solid #F8FAFC' }}>
+          <div className="flex items-center gap-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: '#14B8A6' }}>Calendario</h2>
+          </div>
         </div>
         <MiniCalendario tareas={tareasCalendario} />
       </div>
@@ -558,8 +582,8 @@ const DashboardPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-100 p-7">
-      <div className="flex h-[calc(100vh-56px)] bg-slate-50 overflow-hidden rounded-2xl border border-slate-100 shadow-sm">
+    <div className="min-h-screen p-6" style={{ background: '#F7F8FA' }}>
+      <div className="flex h-[calc(100vh-48px)] overflow-hidden rounded-2xl shadow-sm" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0' }}>
         <Sidebar
           carpetas={carpetas}
           carpetaSeleccionada={carpetaSeleccionada}
@@ -575,49 +599,63 @@ const DashboardPage = () => {
           {/* Área central */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {!carpetaSeleccionada ? (
-              <div className="h-full flex items-center justify-center">
-                <div className="text-center space-y-3">
-                  <div className="text-6xl">📁</div>
-                  <p className="text-slate-600 font-semibold text-lg">Seleccioná una carpeta</p>
-                  <p className="text-slate-400 text-sm">o creá una nueva con el botón <span className="font-bold text-blue-500">+</span></p>
+              <div className="h-full flex items-center justify-center" style={{ background: '#F7F8FA' }}>
+                <div className="text-center space-y-4">
+                  <svg width="120" height="100" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="mx-auto">
+                    <rect x="10" y="30" width="100" height="65" rx="6" fill="#E6FAF8" stroke="#14B8A6" strokeWidth="2"/>
+                    <path d="M10 42h100" stroke="#14B8A6" strokeWidth="2"/>
+                    <path d="M10 36c0-3.3 2.7-6 6-6h28l6 8H10V36z" fill="#14B8A6"/>
+                    <circle cx="88" cy="24" r="14" fill="#E6FAF8" stroke="#14B8A6" strokeWidth="2"/>
+                    <line x1="88" y1="18" x2="88" y2="30" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="82" y1="24" x2="94" y2="24" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round"/>
+                    <circle cx="30" cy="65" r="4" fill="#14B8A6" opacity="0.3"/>
+                    <circle cx="60" cy="72" r="3" fill="#14B8A6" opacity="0.2"/>
+                    <circle cx="80" cy="60" r="2" fill="#14B8A6" opacity="0.4"/>
+                  </svg>
+                  <p className="font-bold text-lg" style={{ color: '#0F172A' }}>Seleccioná una carpeta</p>
+                  <p className="text-sm" style={{ color: '#64748B' }}>o creá una nueva con el botón <span className="font-bold" style={{ color: '#14B8A6' }}>+</span></p>
                 </div>
               </div>
             ) : (
-              <div className="flex-1 flex flex-col overflow-hidden">
-                <div className="bg-white border-b border-slate-100 px-7 py-7 flex items-center gap-3 shadow-sm">
-                  <span className="w-4 h-4 rounded-full flex-shrink-0" style={{ backgroundColor: carpetaActual?.color }} />
-                  <h1 className="font-bold text-slate-800 text-lg">{carpetaActual?.nombre}</h1>
-                  <span className="ml-auto text-xs text-slate-400 font-medium">
+              <div className="flex-1 flex flex-col overflow-hidden" style={{ background: '#F7F8FA' }}>
+                <div className="px-7 py-5 flex items-center gap-3" style={{ background: '#FFFFFF', borderBottom: '1px solid #E2E8F0' }}>
+                  <span className="w-3.5 h-3.5 rounded-full flex-shrink-0" style={{ backgroundColor: carpetaActual?.color }} />
+                  <h1 className="font-bold text-lg" style={{ color: '#0F172A' }}>{carpetaActual?.nombre}</h1>
+                  <span className="ml-auto text-xs font-medium" style={{ color: '#64748B' }}>
                     {tareas.length} {tareas.length === 1 ? 'tarea' : 'tareas'}
                   </span>
                 </div>
 
-                <div className="flex-1 overflow-y-auto px-7 py-7 space-y-4">
-                  <form onSubmit={handleCrearTarea} className="mb-6 rounded-xl border border-slate-100 bg-white p-6 shadow-sm">
+                <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
+                  <form onSubmit={handleCrearTarea} className="mb-4 rounded-xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0' }}>
                     <div className="flex flex-col gap-3 lg:flex-row">
                       <input
                         type="text"
                         value={nuevaTarea}
                         onChange={e => setNuevaTarea(e.target.value)}
                         placeholder="Agregar nueva tarea..."
-                        className="min-w-0 flex-1 text-sm border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white placeholder-slate-400"
+                        className="min-w-0 flex-1 text-sm rounded-lg px-4 py-3 focus:outline-none"
+                        style={{ border: '1px solid #E2E8F0', background: '#F7F8FA', color: '#0F172A' }}
                       />
                       <input
                         type="datetime-local"
                         value={nuevaFechaVencimiento}
                         onChange={e => setNuevaFechaVencimiento(e.target.value)}
-                        className="lg:w-56 text-sm border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-600"
+                        className="lg:w-56 text-sm rounded-lg px-4 py-3 focus:outline-none"
+                        style={{ border: '1px solid #E2E8F0', background: '#F7F8FA', color: '#64748B' }}
                         title="Fecha y hora para mostrar en calendario"
                       />
                       <button
                         type="button"
                         onClick={() => setMostrarDetallesNuevaTarea(prev => !prev)}
-                        className="lg:w-28 text-sm border border-slate-200 text-slate-500 rounded-lg px-4 py-3 hover:bg-slate-50 font-medium"
+                        className="lg:w-28 text-sm rounded-lg px-4 py-3 font-medium transition-colors"
+                        style={{ border: '1px solid #E2E8F0', color: '#64748B', background: '#F7F8FA' }}
                       >
                         Detalles
                       </button>
                       <button type="submit"
-                        className="lg:w-12 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors font-bold text-lg shadow-sm">
+                        className="lg:w-12 text-white px-4 py-3 rounded-lg font-bold text-lg transition-colors"
+                        style={{ background: '#14B8A6' }}>
                         +
                       </button>
                     </div>
@@ -627,7 +665,8 @@ const DashboardPage = () => {
                         onChange={e => setNuevaDescripcion(e.target.value)}
                         placeholder="Temas, subtareas o informacion extra (un item por linea)..."
                         rows={3}
-                        className="mt-4 w-full text-sm border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white resize-none placeholder-slate-400"
+                        className="mt-4 w-full text-sm rounded-lg px-4 py-3 focus:outline-none resize-none"
+                        style={{ border: '1px solid #E2E8F0', background: '#F7F8FA', color: '#0F172A' }}
                       />
                     )}
                   </form>
@@ -635,14 +674,14 @@ const DashboardPage = () => {
                   {tareas.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-40 space-y-2">
                       <span className="text-3xl">✅</span>
-                      <p className="text-sm text-slate-400">No hay tareas todavía</p>
+                      <p className="text-sm font-medium" style={{ color: '#64748B' }}>No hay tareas todavía</p>
                     </div>
                   ) : (
                     tareas.map(tarea => (
                       <TareaItem
                         key={tarea.id}
                         tarea={tarea}
-                        color={carpetaActual?.color || '#3498db'}
+                        color={carpetaActual?.color || '#14B8A6'}
                         onCambiarEstado={handleCambiarEstado}
                         onEliminar={handleEliminarTarea}
                         onActualizar={handleActualizarTarea}
@@ -721,11 +760,12 @@ const DashboardPage = () => {
       )}
 
       {/* FAB — crear carpeta */}
-      <div className="fixed bottom-14 right-14 z-50">
+      <div className="fixed bottom-10 right-10 z-50">
           {mostrarFAB && (
             <form onSubmit={handleCrearCarpetaFAB}
-              className="absolute bottom-14 right-0 bg-white rounded-2xl shadow-xl border border-slate-100 p-7 w-72">
-              <p className="text-xs font-bold text-slate-600 mb-2 uppercase tracking-wider">Nueva carpeta</p>
+              className="absolute bottom-16 right-0 rounded-2xl shadow-2xl p-6 w-72"
+              style={{ background: '#FFFFFF', border: '1px solid #E2E8F0' }}>
+              <p className="text-xs font-bold mb-3 uppercase tracking-wider" style={{ color: '#0F172A' }}>Nueva carpeta</p>
               <input
                 type="text"
                 maxLength={15}
@@ -733,27 +773,30 @@ const DashboardPage = () => {
                 onChange={e => setNombreFAB(e.target.value)}
                 placeholder="Nombre..."
                 autoFocus
-                className="w-full text-sm border border-slate-200 rounded-lg px-4 py-2.5 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full text-sm rounded-lg px-4 py-2.5 mb-3 focus:outline-none"
+                style={{ border: '1px solid #E2E8F0', background: '#F7F8FA', color: '#0F172A' }}
               />
               <select
                 value={parentFAB}
                 onChange={e => setParentFAB(e.target.value === 'root' ? 'root' : Number(e.target.value))}
-                className="w-full text-sm border border-slate-200 rounded-lg px-4 py-2.5 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-600"
+                className="w-full text-sm rounded-lg px-4 py-2.5 mb-4 focus:outline-none"
+                style={{ border: '1px solid #E2E8F0', background: '#F7F8FA', color: '#64748B' }}
               >
                 <option value="root">Carpeta principal</option>
                 {opcionesCarpetas().map(c => (
                   <option key={c.id} value={c.id}>{c.nombre}</option>
                 ))}
               </select>
-              <div className="flex gap-1.5 mb-3">
+              <div className="flex gap-1.5 mb-4">
                 {COLORES.map(c => (
                   <button key={c} type="button" onClick={() => setColorFAB(c)}
-                    className={`w-5 h-5 rounded-full transition-transform ${colorFAB === c ? 'scale-125 ring-2 ring-offset-1 ring-slate-300' : ''}`}
+                    className={`w-5 h-5 rounded-full transition-transform ${colorFAB === c ? 'scale-125 ring-2 ring-offset-2 ring-teal-300' : ''}`}
                     style={{ backgroundColor: c }} />
                 ))}
               </div>
               <button type="submit"
-                className="w-full bg-blue-600 text-white text-sm py-2.5 rounded-lg hover:bg-blue-700 font-medium">
+                className="w-full text-white text-sm py-2.5 rounded-lg font-semibold transition-colors"
+                style={{ background: '#14B8A6' }}>
                 Crear
               </button>
             </form>
@@ -761,7 +804,8 @@ const DashboardPage = () => {
           <button
             onClick={toggleFAB}
             title="Crear carpeta"
-            className="w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg flex items-center justify-center text-2xl transition-all hover:scale-110"
+            className="w-14 h-14 rounded-full text-white shadow-lg flex items-center justify-center text-2xl transition-all hover:scale-110"
+            style={{ background: '#14B8A6', boxShadow: '0 4px 20px rgba(20,184,166,0.4)' }}
           >
             {mostrarFAB ? '×' : '+'}
           </button>
