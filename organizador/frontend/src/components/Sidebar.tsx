@@ -207,7 +207,7 @@ const Sidebar = ({
 
       {abierto && <div className="md:hidden fixed inset-0 bg-black/30 z-30" onClick={() => setAbierto(false)} />}
 
-      <aside className={`fixed md:static inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-100 h-screen flex flex-col transform transition-transform duration-300 ${abierto ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+      <aside className={`fixed md:static inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-100 h-full flex flex-col transform transition-transform duration-300 ${abierto ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         <div className="px-7 py-7 border-b border-slate-100">
           <div className="flex items-center justify-between">
             <div>
@@ -240,8 +240,8 @@ const Sidebar = ({
           </div>
         </div>
 
-        {/* LOGO DEVTASK CLAVADO EN EL PISO CON POSICIÓN ABSOLUTA */}
-        <div className="absolute bottom-8 left-7 text-xl font-black text-slate-800 tracking-wider select-none">
+        {/* LOGO DEVTASK */}
+        <div className="px-7 py-5 border-t border-slate-100 text-xl font-black text-slate-800 tracking-wider select-none">
           Dev<span className="text-blue-600">Task</span>
         </div>
 
