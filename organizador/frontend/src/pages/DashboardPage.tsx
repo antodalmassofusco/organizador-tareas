@@ -546,7 +546,7 @@ const DashboardPage = () => {
             <textarea
               value={contenidoNota}
               onChange={e => setContenidoNota(e.target.value)}
-              placeholder="Escrib\u00ed tus ideas..."
+              placeholder="Escribe tus ideas..."
               className="flex-1 px-6 py-5 text-sm resize-none focus:outline-none"
               style={{ color: '#0F172A', background: '#FFFFFF' }}
             />
@@ -564,7 +564,7 @@ const DashboardPage = () => {
             </svg>
             <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#14B8A6' }}>Anotaciones</p>
           </div>
-          <p className="text-xs italic" style={{ color: '#CBD5E1' }}>Selecion\u00e1 una carpeta para ver las notas</p>
+          <p className="text-xs italic" style={{ color: '#CBD5E1' }}>Selecioná una carpeta para ver las notas</p>
         </div>
       )}
       <div className="flex-shrink-0">

@@ -17,3 +17,13 @@ body {
   background-color: #F7F8FA;
   color: #0F172A;
 }
+
+/* Ocultar la barra gris de scroll en el sidebar */
+aside, aside * {
+  -ms-overflow-style: none;  /* Oculta en Internet Explorer y Edge */
+  scrollbar-width: none;     /* Oculta en Firefox */
+}
+
+aside::-webkit-scrollbar, aside *::-webkit-scrollbar {
+  display: none;             /* Oculta en Chrome, Safari y el resto */
+}
