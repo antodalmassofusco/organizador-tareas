@@ -31,12 +31,6 @@ const IconSalir = () => (
 );
 
 // Logo shield icon
-const LogoIcon = () => (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-    <path d="M16 2L4 7v9c0 7 5.3 13.5 12 15 6.7-1.5 12-8 12-15V7L16 2z" fill="#14B8A6" />
-    <polyline points="11,16 14.5,19.5 21,13" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-  </svg>
-);
 
 const Sidebar = ({
   carpetas,
