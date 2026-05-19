@@ -207,6 +207,8 @@ interface TareaItemProps {
 
 const TareaItem = ({ tarea, color, onCambiarEstado, onEliminar, onActualizar }: TareaItemProps) => {
   const [expandida, setExpandida] = useState(false);
+  const [editandoTitulo, setEditandoTitulo] = useState(false);
+  const [titulo, setTitulo] = useState(tarea.titulo);
   const [editandoDesc, setEditandoDesc] = useState(false);
   const [desc, setDesc] = useState(tarea.descripcion || '');
   const [editandoFecha, setEditandoFecha] = useState(false);
@@ -229,6 +231,13 @@ const TareaItem = ({ tarea, color, onCambiarEstado, onEliminar, onActualizar }: 
   const guardarDesc = async () => {
     await onActualizar(tarea.id, { descripcion: desc });
     setEditandoDesc(false);
+  };
+
+  const guardarTitulo = async () => {
+    if (titulo.trim()) {
+      await onActualizar(tarea.id, { titulo: titulo.trim() });
+      setEditandoTitulo(false);
+    }
   };
 
   const guardarFecha = async () => {
@@ -260,7 +269,7 @@ const TareaItem = ({ tarea, color, onCambiarEstado, onEliminar, onActualizar }: 
           style={{ borderColor: color, backgroundColor: tarea.estado === 'COMPLETADA' ? color : 'transparent' }}
         />
         <button onClick={() => setExpandida(!expandida)} className="flex-1 text-left min-w-0">
-          <p className="text-sm text-slate-700 font-medium truncate" style={estiloTexto()}>{tarea.titulo}</p>
+          <p className="text-sm text-slate-700 font-medium truncate cursor-text" onDoubleClick={() => setEditandoTitulo(true)} style={estiloTexto()} title="Doble clic para editar">{tarea.titulo}</p>
           {tarea.fecha_vencimiento && (
             <p className={`text-[10px] mt-0.5 font-medium ${vencColor()}`}>
               📅 {formatFecha(tarea.fecha_vencimiento)} · {vencimiento}
@@ -281,6 +290,36 @@ const TareaItem = ({ tarea, color, onCambiarEstado, onEliminar, onActualizar }: 
       {/* Panel expandido */}
       {expandida && (
         <div className="border-t border-slate-50 px-7 py-6 bg-slate-50 space-y-5">
+
+          {/* Título */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Título</span>
+              <button onClick={() => setEditandoTitulo(!editandoTitulo)}
+                className="text-xs text-blue-500 hover:text-blue-700 font-medium">
+                {editandoTitulo ? 'Cancelar' : 'Editar'}
+              </button>
+            </div>
+            {editandoTitulo ? (
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  value={titulo}
+                  onChange={e => setTitulo(e.target.value)}
+                  placeholder="Nombre de la tarea..."
+                  maxLength={100}
+                  className="w-full text-sm border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  autoFocus
+                />
+                <button onClick={guardarTitulo}
+                  className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 font-medium">
+                  Guardar
+                </button>
+              </div>
+            ) : (
+              <p className="text-sm font-medium" style={estiloTexto()}>{tarea.titulo}</p>
+            )}
+          </div>
 
           {/* Subtareas / descripción */}
           <div>
@@ -407,8 +446,8 @@ const DashboardPage = () => {
     return nueva;
   };
 
-  const handleRenombrarCarpeta = async (id: number, nombre: string) => {
-    const actualizada = await actualizarCarpeta(id, { nombre });
+  const handleRenombrarCarpeta = async (id: number, nombre: string, color?: string) => {
+    const actualizada = await actualizarCarpeta(id, { nombre, ...(color ? { color } : {}) });
     setCarpetas(prev => prev.map(c => c.id === id ? actualizada : c));
   };
 

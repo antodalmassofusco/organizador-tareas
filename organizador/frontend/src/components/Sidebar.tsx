@@ -7,7 +7,7 @@ interface Props {
   onSeleccionarCarpeta: (id: number) => void;
   onCrearCarpeta: (nombre: string, color: string, parent_id?: number) => void | Promise<Carpeta | void>;
   onEliminarCarpeta: (id: number) => void | Promise<void>;
-  onRenombrarCarpeta: (id: number, nombre: string) => void | Promise<void>;
+  onRenombrarCarpeta: (id: number, nombre: string, color?: string) => void | Promise<void>;
   onLogout: () => void;
   nombreUsuario: string;
 }
@@ -50,6 +50,7 @@ const Sidebar = ({
 
   const [editandoId, setEditandoId] = useState<number | null>(null);
   const [editandoNombre, setEditandoNombre] = useState('');
+  const [colorEditando, setColorEditando] = useState('#14B8A6');
   const inputEditRef = useRef<HTMLInputElement>(null);
 
   const carpetasRaiz = carpetas.filter(c => c.parent_id === null);
@@ -79,6 +80,7 @@ const Sidebar = ({
   const iniciarEdicion = (carpeta: Carpeta) => {
     setEditandoId(carpeta.id);
     setEditandoNombre(carpeta.nombre);
+    setColorEditando(carpeta.color);
     setTimeout(() => inputEditRef.current?.select(), 30);
   };
 
@@ -86,10 +88,11 @@ const Sidebar = ({
     if (editandoId === null) return;
     const fontNombre = editandoNombre.trim();
     if (fontNombre && fontNombre.length <= 15) {
-      await onRenombrarCarpeta(editandoId, fontNombre);
+      await onRenombrarCarpeta(editandoId, fontNombre, colorEditando);
     }
     setEditandoId(null);
     setEditandoNombre('');
+    setColorEditando('#14B8A6');
   };
 
   const cancelarEdicion = () => { setEditandoId(null); setEditandoNombre(''); };
@@ -147,18 +150,27 @@ const Sidebar = ({
           ) : <div className="w-5 flex-shrink-0" />}
 
           {editando ? (
-            <input
-              ref={inputEditRef}
-              type="text"
-              maxLength={15}
-              value={editandoNombre}
-              onChange={e => setEditandoNombre(e.target.value)}
-              onBlur={confirmarEdicion}
-              onKeyDown={handleKeyDownEdit}
-              className="flex-1 text-sm rounded-lg px-3 py-1.5 focus:outline-none mr-1"
-              style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid #14B8A6', color: '#fff' }}
-              autoFocus
-            />
+            <div className="flex-1 mr-2">
+              <input
+                ref={inputEditRef}
+                type="text"
+                maxLength={15}
+                value={editandoNombre}
+                onChange={e => setEditandoNombre(e.target.value)}
+                onKeyDown={handleKeyDownEdit}
+                className="w-full text-sm rounded-lg px-3 py-1.5 focus:outline-none"
+                style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid #14B8A6', color: '#fff' }}
+                autoFocus
+              />
+              <div className="flex flex-wrap gap-2 mt-2">
+                {COLORES.map(color => (
+                  <button key={color} type="button" onClick={() => setColorEditando(color)}
+                    className={`w-5 h-5 rounded-full transition-transform ${colorEditando === color ? 'scale-125 ring-2 ring-offset-1 ring-white/40' : ''}`}
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
+              </div>
+            </div>
           ) : (
             <button
               onClick={() => { onSeleccionarCarpeta(carpeta.id); setAbierto(false); }}
@@ -190,12 +202,20 @@ const Sidebar = ({
           )}
 
           {editando && (
-            <button
-              onMouseDown={e => { e.preventDefault(); cancelarEdicion(); }}
-              className="w-6 h-6 flex items-center justify-center rounded-lg transition-all flex-shrink-0 text-sm"
-              style={{ color: '#64748B' }}
-              title="Cancelar"
-            >✕</button>
+            <>
+              <button
+                onMouseDown={e => { e.preventDefault(); confirmarEdicion(); }}
+                className="w-6 h-6 flex items-center justify-center rounded-lg transition-all flex-shrink-0 text-sm"
+                style={{ color: '#14B8A6' }}
+                title="Guardar"
+              >✓</button>
+              <button
+                onMouseDown={e => { e.preventDefault(); cancelarEdicion(); }}
+                className="w-6 h-6 flex items-center justify-center rounded-lg transition-all flex-shrink-0 text-sm"
+                style={{ color: '#64748B' }}
+                title="Cancelar"
+              >✕</button>
+            </>
           )}
         </div>
 
