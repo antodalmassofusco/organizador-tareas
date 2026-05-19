@@ -370,6 +370,7 @@ const DashboardPage = () => {
   const [carpetaAEliminar, setCarpetaAEliminar] = useState<Carpeta | null>(null);
   const [eliminandoCarpeta, setEliminandoCarpeta] = useState(false);
   const [errorEliminarCarpeta, setErrorEliminarCarpeta] = useState('');
+  const [panelDerechoAbierto, setPanelDerechoAbierto] = useState(false);
 
   const COLORES = ['#14B8A6', '#2563EB', '#F59E0B', '#EF4444', '#8B5CF6', '#10B981'];
 
@@ -529,58 +530,6 @@ const DashboardPage = () => {
   const idsCarpetaAEliminar = carpetaAEliminar ? idsCarpetasConHijas(carpetaAEliminar.id, carpetas) : [];
   const cantidadSubcarpetasAEliminar = Math.max(0, idsCarpetaAEliminar.length - 1);
 
-  // Panel derecho: notas + calendario (compartido entre estado vacío y con carpeta)
-  const renderPanelDerecho = () => (
-    <div className="w-80 flex-shrink-0 flex flex-col overflow-hidden" style={{ background: '#FFFFFF', borderLeft: '1px solid #E2E8F0' }}>
-      {carpetaSeleccionada ? (
-        <>
-          <div className="flex-1 flex flex-col overflow-hidden" style={{ borderBottom: '1px solid #E2E8F0' }}>
-            <div className="px-6 pt-6 pb-4" style={{ borderBottom: '1px solid #F8FAFC' }}>
-              <div className="flex items-center gap-2">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-                </svg>
-                <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: '#14B8A6' }}>Anotaciones</h2>
-              </div>
-            </div>
-            <textarea
-              value={contenidoNota}
-              onChange={e => setContenidoNota(e.target.value)}
-              placeholder="Escribe tus ideas..."
-              className="flex-1 px-6 py-5 text-sm resize-none focus:outline-none"
-              style={{ color: '#0F172A', background: '#FFFFFF' }}
-            />
-            <div className="px-6 py-3 flex items-center gap-1.5" style={{ borderTop: '1px solid #F8FAFC' }}>
-              <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#14B8A6' }} />
-              <p className="text-xs" style={{ color: '#94A3B8' }}>Guardado autom\u00e1tico</p>
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="flex-shrink-0 px-6 py-6" style={{ borderBottom: '1px solid #E2E8F0' }}>
-          <div className="flex items-center gap-2 mb-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-            </svg>
-            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#14B8A6' }}>Anotaciones</p>
-          </div>
-          <p className="text-xs italic" style={{ color: '#CBD5E1' }}>Selecioná una carpeta para ver las notas</p>
-        </div>
-      )}
-      <div className="flex-shrink-0">
-        <div className="px-6 pt-5 pb-3" style={{ borderBottom: '1px solid #F8FAFC' }}>
-          <div className="flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
-            <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: '#14B8A6' }}>Calendario</h2>
-          </div>
-        </div>
-        <MiniCalendario tareas={tareasCalendario} />
-      </div>
-    </div>
-  );
-
   return (
     <div className="min-h-screen p-6" style={{ background: '#F7F8FA' }}>
       <div className="flex h-[calc(100vh-48px)] overflow-hidden rounded-2xl shadow-sm" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0' }}>
@@ -693,8 +642,72 @@ const DashboardPage = () => {
             )}
           </div>
 
-          {/* Panel derecho fijo */}
-          {renderPanelDerecho()}
+          {/* Botón toggle para panel derecho en móvil */}
+          <button onClick={() => setPanelDerechoAbierto(!panelDerechoAbierto)}
+            className="md:hidden fixed top-4 right-4 z-50 shadow-md rounded-lg p-2"
+            style={{ background: '#0F172A' }}>
+            <div className="w-5 h-0.5 bg-white mb-1" />
+            <div className="w-5 h-0.5 bg-white mb-1" />
+            <div className="w-5 h-0.5 bg-white" />
+          </button>
+
+          {/* Overlay para móvil */}
+          {panelDerechoAbierto && <div className="md:hidden fixed inset-0 bg-black/50 z-30" onClick={() => setPanelDerechoAbierto(false)} />}
+
+          {/* Panel derecho: fijo en desktop, drawer en móvil */}
+          <div
+            className={`fixed md:static inset-y-0 right-0 z-40 w-80 h-full flex-shrink-0 flex flex-col overflow-hidden transition-transform duration-300 ${
+              panelDerechoAbierto ? 'translate-x-0' : 'translate-x-full md:translate-x-0'
+            }`}
+            style={{ background: '#FFFFFF', borderLeft: '1px solid #E2E8F0' }}
+          >
+            {carpetaSeleccionada ? (
+              <>
+                <div className="flex-1 flex flex-col overflow-hidden" style={{ borderBottom: '1px solid #E2E8F0' }}>
+                  <div className="px-6 pt-6 pb-4" style={{ borderBottom: '1px solid #F8FAFC' }}>
+                    <div className="flex items-center gap-2">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                      </svg>
+                      <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: '#14B8A6' }}>Anotaciones</h2>
+                    </div>
+                  </div>
+                  <textarea
+                    value={contenidoNota}
+                    onChange={e => setContenidoNota(e.target.value)}
+                    placeholder="Escribe tus ideas..."
+                    className="flex-1 px-6 py-5 text-sm resize-none focus:outline-none"
+                    style={{ color: '#0F172A', background: '#FFFFFF' }}
+                  />
+                  <div className="px-6 py-3 flex items-center gap-1.5" style={{ borderTop: '1px solid #F8FAFC' }}>
+                    <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#14B8A6' }} />
+                    <p className="text-xs" style={{ color: '#94A3B8' }}>Guardado automático</p>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="flex-shrink-0 px-6 py-6" style={{ borderBottom: '1px solid #E2E8F0' }}>
+                <div className="flex items-center gap-2 mb-2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                  </svg>
+                  <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#14B8A6' }}>Anotaciones</p>
+                </div>
+                <p className="text-xs italic" style={{ color: '#CBD5E1' }}>Selecciona una carpeta para ver las notas</p>
+              </div>
+            )}
+            <div className="flex-shrink-0">
+              <div className="px-6 pt-5 pb-3" style={{ borderBottom: '1px solid #F8FAFC' }}>
+                <div className="flex items-center gap-2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: '#14B8A6' }}>Calendario</h2>
+                </div>
+              </div>
+              <MiniCalendario tareas={tareasCalendario} />
+            </div>
+          </div>
         </main>
       </div>
 
