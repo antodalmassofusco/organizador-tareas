@@ -223,9 +223,9 @@ const Sidebar = ({
         style={{ background: '#0F172A' }}
       >
         {/* Logo */}
-        <div className="px-5 py-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-          <img src="/logo-devtask-blanco.png" alt="DevTask" className="w-30 h-auto object-contain mx-auto" />
-        </div>
+        {/*<div className="px-5 py-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <img src="/logo-devtask-blanco.png" alt="DevTask" className="w-24 h-auto object-contain mx-auto" />
+        </div>/}
 
         {/* Usuario */}
         <div className="px-6 py-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
@@ -270,7 +270,7 @@ const Sidebar = ({
 
         {/* Footer DevTask */}
         <div className="px-5 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-          <img src="/logo-devtask-blanco.png" alt="DevTask" className="w-24 h-auto object-contain mx-auto" />
+          <img src="/logo-devtask-blanco.png" alt="DevTask" className="w-50 h-auto object-contain mx-auto" />
         </div>
       </aside>
     </>
