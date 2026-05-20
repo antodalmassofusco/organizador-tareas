@@ -37,7 +37,7 @@ const LoginPage = () => {
         </div>
 
         {/* Tarjeta */}
-        <div className="bg-white rounded-2xl shadow-sm p-4 max-h-[calc(100vh-140px)] overflow-y-auto" style={{ border: '1px solid #E2E8F0' }}>
+        <div className="rounded-2xl shadow-sm p-4 max-h-[calc(100vh-140px)] overflow-y-auto" style={{ background: '#FFFBF0', border: '1px solid #E2E8F0' }}>
           <h1 className="text-xl font-bold mb-0.5" style={{ color: '#0F172A' }}>
             {modo === 'login' ? 'Iniciá sesión' : 'Crear cuenta'}
           </h1>
