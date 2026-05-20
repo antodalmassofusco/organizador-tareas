@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Carpeta, Tarea, Nota } from '../types/index';
 import { getCarpetas, crearCarpeta, eliminarCarpeta, actualizarCarpeta } from '../api/carpetas';
-import { getTareas, crearTarea, actualizarTarea, eliminarTarea } from '../api/tareas';
+import { getTareas, crearTarea, actualizarTarea, eliminarTarea, reordenarTareas } from '../api/tareas';
 import { getNotaPorCarpeta, crearNota, actualizarNota } from '../api/notas';
 import Sidebar from '../components/Sidebar';
 import { useAuth } from '../hooks/useAuth';
@@ -200,12 +200,16 @@ const MiniCalendario = ({ tareas }: { tareas: Tarea[] }) => {
 interface TareaItemProps {
   tarea: Tarea;
   color: string;
+  index: number;
+  totalTareas: number;
   onCambiarEstado: (t: Tarea) => void;
   onEliminar: (id: number) => void;
   onActualizar: (id: number, datos: Partial<Tarea>) => void | Promise<void>;
+  onMoverArriba: (index: number) => void | Promise<void>;
+  onMoverAbajo: (index: number) => void | Promise<void>;
 }
 
-const TareaItem = ({ tarea, color, onCambiarEstado, onEliminar, onActualizar }: TareaItemProps) => {
+const TareaItem = ({ tarea, color, index, totalTareas, onCambiarEstado, onEliminar, onActualizar, onMoverArriba, onMoverAbajo }: TareaItemProps) => {
   const [expandida, setExpandida] = useState(false);
   const [editandoTitulo, setEditandoTitulo] = useState(false);
   const [titulo, setTitulo] = useState(tarea.titulo);
@@ -226,6 +230,11 @@ const TareaItem = ({ tarea, color, onCambiarEstado, onEliminar, onActualizar }: 
     if (tarea.estado === 'EN_PROGRESO') return <span className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold text-white" style={{ backgroundColor: color + '20', color: color }}>En progreso</span>;
     if (tarea.estado === 'COMPLETADA') return <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-semibold">Completada</span>;
     return <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-full font-semibold">Pendiente</span>;
+  };
+
+  const prioridadLabel = (p: number) => {
+    const labels = ['', '🔴 Baja', '🟠 Media-Baja', '🟡 Media', '🔶 Alta', '🔴 Crítica'];
+    return labels[Math.min(Math.max(p, 1), 5)] || 'Media';
   };
 
   const guardarDesc = async () => {
@@ -278,6 +287,16 @@ const TareaItem = ({ tarea, color, onCambiarEstado, onEliminar, onActualizar }: 
         </button>
         <div className="flex items-center gap-1.5 flex-shrink-0">
           {badge()}
+          <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button onClick={() => onMoverArriba(index)} disabled={index === 0} title="Mover arriba"
+              className="text-slate-400 hover:text-slate-600 disabled:opacity-30 transition-colors text-xs px-1 py-1 hover:bg-slate-100 rounded">
+              ▲
+            </button>
+            <button onClick={() => onMoverAbajo(index)} disabled={index === totalTareas - 1} title="Mover abajo"
+              className="text-slate-400 hover:text-slate-600 disabled:opacity-30 transition-colors text-xs px-1 py-1 hover:bg-slate-100 rounded">
+              ▼
+            </button>
+          </div>
           <button onClick={() => setExpandida(!expandida)}
             className="text-slate-400 hover:text-slate-600 transition-colors text-xs px-1">
             {expandida ? '▲' : '▼'}
@@ -319,6 +338,29 @@ const TareaItem = ({ tarea, color, onCambiarEstado, onEliminar, onActualizar }: 
             ) : (
               <p className="text-sm font-medium" style={estiloTexto()}>{tarea.titulo}</p>
             )}
+          </div>
+
+          {/* Prioridad */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Prioridad</span>
+            </div>
+            <div className="flex items-center gap-2">
+              {[1, 2, 3, 4, 5].map(p => (
+                <button
+                  key={p}
+                  onClick={() => onActualizar(tarea.id, { prioridad: p })}
+                  className={`w-8 h-8 rounded-lg font-bold text-xs transition-all ${
+                    tarea.prioridad === p
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-slate-500 mt-2">{prioridadLabel(tarea.prioridad)}</p>
           </div>
 
           {/* Subtareas / descripción */}
@@ -555,6 +597,32 @@ const DashboardPage = () => {
     setTareasCalendario(prev => prev.filter(t => t.id !== id));
   };
 
+  const handleMoverArriba = async (index: number) => {
+    if (index === 0) return;
+    const nuevasTareas = [...tareas];
+    [nuevasTareas[index - 1], nuevasTareas[index]] = [nuevasTareas[index], nuevasTareas[index - 1]];
+    
+    // Actualizar órdenes localmente
+    const tareasConOrden = nuevasTareas.map((t, i) => ({ ...t, orden: i }));
+    setTareas(tareasConOrden);
+    
+    // Persistir en la BD
+    await reordenarTareas(tareasConOrden.map(t => ({ id: t.id, orden: t.orden })));
+  };
+
+  const handleMoverAbajo = async (index: number) => {
+    if (index === tareas.length - 1) return;
+    const nuevasTareas = [...tareas];
+    [nuevasTareas[index], nuevasTareas[index + 1]] = [nuevasTareas[index + 1], nuevasTareas[index]];
+    
+    // Actualizar órdenes localmente
+    const tareasConOrden = nuevasTareas.map((t, i) => ({ ...t, orden: i }));
+    setTareas(tareasConOrden);
+    
+    // Persistir en la BD
+    await reordenarTareas(tareasConOrden.map(t => ({ id: t.id, orden: t.orden })));
+  };
+
   const carpetaActual = carpetas.find(c => c.id === carpetaSeleccionada);
   const carpetasPorParent = (parentId: number | null) => carpetas.filter(c => c.parent_id === parentId);
   const opcionesCarpetas = (parentId: number | null = null, nivel: number = 0): { id: number; nombre: string }[] =>
@@ -667,14 +735,18 @@ const DashboardPage = () => {
                       <p className="text-sm font-medium" style={{ color: '#64748B' }}>No hay tareas todavía</p>
                     </div>
                   ) : (
-                    tareas.map(tarea => (
+                    tareas.map((tarea, index) => (
                       <TareaItem
                         key={tarea.id}
                         tarea={tarea}
                         color={carpetaActual?.color || '#14B8A6'}
+                        index={index}
+                        totalTareas={tareas.length}
                         onCambiarEstado={handleCambiarEstado}
                         onEliminar={handleEliminarTarea}
                         onActualizar={handleActualizarTarea}
+                        onMoverArriba={handleMoverArriba}
+                        onMoverAbajo={handleMoverAbajo}
                       />
                     ))
                   )}

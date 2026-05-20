@@ -8,12 +8,13 @@ export const getTareas = async (carpeta_id?: number): Promise<Tarea[]> => {
   return res.data.data;
 };
 
-export const crearTarea = async (titulo: string, carpeta_id: number, descripcion?: string, fecha_vencimiento?: string): Promise<Tarea> => {
+export const crearTarea = async (titulo: string, carpeta_id: number, descripcion?: string, fecha_vencimiento?: string, prioridad?: number): Promise<Tarea> => {
   const res = await client.post('/tareas', {
     titulo,
     carpeta_id,
     descripcion,
     fecha_vencimiento,
+    prioridad,
     en_calendario: Boolean(fecha_vencimiento),
   });
   return res.data.data;

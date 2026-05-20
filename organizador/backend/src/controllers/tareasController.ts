@@ -24,7 +24,7 @@ export const getTareas = async (req: AuthRequest, res: Response): Promise<void> 
 };
 
 export const crearTarea = async (req: AuthRequest, res: Response): Promise<void> => {
-  const { titulo, descripcion, carpeta_id, fecha_vencimiento } = req.body;
+  const { titulo, descripcion, carpeta_id, fecha_vencimiento, prioridad } = req.body;
 
   if (!titulo || !carpeta_id) {
     res.status(400).json({ error: true, mensaje: 'Título y carpeta son obligatorios' });
@@ -39,8 +39,8 @@ export const crearTarea = async (req: AuthRequest, res: Response): Promise<void>
     const orden = ordenResult.rows[0].siguiente;
 
     const result = await pool.query(
-      'INSERT INTO tareas (titulo, descripcion, carpeta_id, usuario_id, orden, en_calendario, fecha_vencimiento) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-      [titulo, descripcion || null, carpeta_id, req.usuario!.id, orden, Boolean(fecha_vencimiento), fecha_vencimiento || null]
+      'INSERT INTO tareas (titulo, descripcion, carpeta_id, usuario_id, orden, prioridad, en_calendario, fecha_vencimiento) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+      [titulo, descripcion || null, carpeta_id, req.usuario!.id, orden, prioridad || 3, Boolean(fecha_vencimiento), fecha_vencimiento || null]
     );
     res.status(201).json({ error: false, data: result.rows[0] });
   } catch {
@@ -50,7 +50,7 @@ export const crearTarea = async (req: AuthRequest, res: Response): Promise<void>
 
 export const actualizarTarea = async (req: AuthRequest, res: Response): Promise<void> => {
   const { id } = req.params;
-  const { titulo, descripcion, estado, en_calendario, fecha_vencimiento } = req.body;
+  const { titulo, descripcion, estado, prioridad, en_calendario, fecha_vencimiento } = req.body;
 
   try {
     const updates: string[] = [];
@@ -63,6 +63,7 @@ export const actualizarTarea = async (req: AuthRequest, res: Response): Promise<
     if (Object.prototype.hasOwnProperty.call(req.body, 'titulo')) agregarCampo('titulo', titulo);
     if (Object.prototype.hasOwnProperty.call(req.body, 'descripcion')) agregarCampo('descripcion', descripcion);
     if (Object.prototype.hasOwnProperty.call(req.body, 'estado')) agregarCampo('estado', estado);
+    if (Object.prototype.hasOwnProperty.call(req.body, 'prioridad')) agregarCampo('prioridad', prioridad);
     if (Object.prototype.hasOwnProperty.call(req.body, 'en_calendario')) agregarCampo('en_calendario', en_calendario);
     if (Object.prototype.hasOwnProperty.call(req.body, 'fecha_vencimiento')) {
       agregarCampo('fecha_vencimiento', fecha_vencimiento || null);
@@ -117,19 +118,32 @@ export const eliminarTarea = async (req: AuthRequest, res: Response): Promise<vo
 export const reordenarTareas = async (req: AuthRequest, res: Response): Promise<void> => {
   const { tareas } = req.body;
 
-  if (!Array.isArray(tareas)) {
-    res.status(400).json({ error: true, mensaje: 'Se esperaba un array de tareas' });
+  if (!Array.isArray(tareas) || tareas.length === 0) {
+    res.status(400).json({ error: true, mensaje: 'Se esperaba un array no vacío de tareas' });
     return;
   }
 
   try {
-    for (const tarea of tareas) {
-      await pool.query(
-        'UPDATE tareas SET orden = $1 WHERE id = $2 AND usuario_id = $3',
-        [tarea.orden, tarea.id, req.usuario!.id]
-      );
+    // Crear una transacción para actualizar todas las órdenes
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+
+      for (const tarea of tareas) {
+        await client.query(
+          'UPDATE tareas SET orden = $1 WHERE id = $2 AND usuario_id = $3',
+          [tarea.orden, tarea.id, req.usuario!.id]
+        );
+      }
+
+      await client.query('COMMIT');
+      res.json({ error: false, mensaje: 'Tareas reordenadas correctamente' });
+    } catch {
+      await client.query('ROLLBACK');
+      throw new Error();
+    } finally {
+      client.release();
     }
-    res.json({ error: false, mensaje: 'Tareas reordenadas correctamente' });
   } catch {
     res.status(500).json({ error: true, mensaje: 'Error al reordenar tareas' });
   }

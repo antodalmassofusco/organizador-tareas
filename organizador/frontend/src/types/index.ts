@@ -18,6 +18,7 @@ export interface Tarea {
   titulo: string;
   descripcion: string | null;
   estado: 'PENDIENTE' | 'EN_PROGRESO' | 'COMPLETADA';
+  prioridad: number;
   orden: number;
   en_calendario: boolean;
   fecha_vencimiento: string | null;

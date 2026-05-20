@@ -23,6 +23,7 @@ CREATE TABLE tareas (
   titulo VARCHAR(255) NOT NULL,
   descripcion TEXT,
   estado VARCHAR(20) DEFAULT 'PENDIENTE' CHECK (estado IN ('PENDIENTE', 'EN_PROGRESO', 'COMPLETADA')),
+  prioridad INT DEFAULT 3 CHECK (prioridad >= 1 AND prioridad <= 5),
   orden INT NOT NULL DEFAULT 0,
   en_calendario BOOLEAN DEFAULT FALSE,
   fecha_vencimiento TIMESTAMP,
