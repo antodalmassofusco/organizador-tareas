@@ -29,7 +29,7 @@ const LoginPage = () => {
     : nombre && email && password && passwordConfirm && passwordsMatch;
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-2" style={{ background: '#F7F8FA' }}>
+    <div className="min-h-screen flex items-center justify-center px-6 py-2" style={{ background: '#FFFEF9' }}>
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex justify-center mb-1">
@@ -37,7 +37,7 @@ const LoginPage = () => {
         </div>
 
         {/* Tarjeta */}
-        <div className="rounded-2xl shadow-sm p-4 max-h-[calc(100vh-140px)] overflow-y-auto" style={{ background: '#FFFBF0', border: '1px solid #E2E8F0' }}>
+        <div className="rounded-2xl shadow-sm p-4 max-h-[calc(100vh-140px)] overflow-y-auto" style={{ background: '#FFFDF5', border: '1px solid #E2E8F0' }}>
           <h1 className="text-xl font-bold mb-0.5" style={{ color: '#0F172A' }}>
             {modo === 'login' ? 'Iniciá sesión' : 'Crear cuenta'}
           </h1>
@@ -55,11 +55,7 @@ const LoginPage = () => {
             {modo === 'registro' && (
               <div>
                 <label className="text-xs font-medium block mb-0.5" style={{ color: '#0F172A' }}>Nombre</label>
-                <div className="flex items-center px-2.5 py-1.5 rounded-lg border" style={{ borderColor: '#E2E8F0', background: '#F7F8FA' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
-                  </svg>
+                <div className="flex items-center px-2.5 py-1.5 rounded-lg border" style={{ borderColor: '#E2E8F0', background: '#FFFEF9' }}>
                   <input
                     type="text"
                     value={nombre}
@@ -75,7 +71,7 @@ const LoginPage = () => {
 
             <div>
               <label className="text-xs font-medium block mb-0.5" style={{ color: '#0F172A' }}>Email</label>
-              <div className="flex items-center px-2.5 py-1.5 rounded-lg border" style={{ borderColor: '#E2E8F0', background: '#F7F8FA' }}>
+              <div className="flex items-center px-2.5 py-1.5 rounded-lg border" style={{ borderColor: '#E2E8F0', background: '#FFFEF9' }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                   <circle cx="12" cy="7" r="4"/>
@@ -94,9 +90,8 @@ const LoginPage = () => {
 
             <div>
               <label className="text-xs font-medium block mb-0.5" style={{ color: '#0F172A' }}>Contraseña</label>
-              <div className="flex items-center px-2.5 py-1.5 rounded-lg border" style={{ borderColor: '#E2E8F0', background: '#F7F8FA' }}>
+              <div className="flex items-center px-2.5 py-1.5 rounded-lg border" style={{ borderColor: '#E2E8F0', background: '#FFFEF9' }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
                 <input
@@ -133,7 +128,7 @@ const LoginPage = () => {
                 <label className="text-xs font-medium block mb-0.5" style={{ color: '#0F172A' }}>Confirmar contraseña</label>
                 <div className={`flex items-center px-2.5 py-1.5 rounded-lg border transition-colors ${
                   passwordConfirm && !passwordsMatch ? 'border-red-300 bg-red-50' : ''
-                }`} style={{ borderColor: passwordConfirm && !passwordsMatch ? '#FCA5A5' : '#E2E8F0', background: passwordConfirm && !passwordsMatch ? '#FEE2E2' : '#F7F8FA' }}>
+                }`} style={{ borderColor: passwordConfirm && !passwordsMatch ? '#FCA5A5' : '#E2E8F0', background: passwordConfirm && !passwordsMatch ? '#FEE2E2' : '#FFFEF9' }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={passwordConfirm && !passwordsMatch ? '#DC2626' : '#94A3B8'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"/>

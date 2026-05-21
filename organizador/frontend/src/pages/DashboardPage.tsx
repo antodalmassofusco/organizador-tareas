@@ -269,7 +269,7 @@ const TareaItem = ({ tarea, color, index, totalTareas, onCambiarEstado, onElimin
   };
 
   return (
-    <div className="rounded-xl border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all overflow-hidden" style={{ background: '#FFFBF0' }}>
+    <div className="rounded-xl border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all overflow-hidden" style={{ background: '#FFFDF5' }}>
       {/* Fila principal */}
       <div className="flex items-center gap-3 px-7 py-5 group">
         <button
@@ -327,7 +327,7 @@ const TareaItem = ({ tarea, color, index, totalTareas, onCambiarEstado, onElimin
                   onChange={e => setTitulo(e.target.value)}
                   placeholder="Nombre de la tarea..."
                   maxLength={100}
-                  className="w-full text-sm border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" style={{ background: '#FFFBF0' }}
+                  className="w-full text-sm border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" style={{ background: '#FFFDF5' }}
                   autoFocus
                 />
                 <button onClick={guardarTitulo}
@@ -379,7 +379,7 @@ const TareaItem = ({ tarea, color, index, totalTareas, onCambiarEstado, onElimin
                   onChange={e => setDesc(e.target.value)}
                   placeholder="Agregá detalles, subtemas o notas (un ítem por línea)..."
                   rows={4}
-                  className="w-full text-sm border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" style={{ background: '#FFFBF0' }}
+                  className="w-full text-sm border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" style={{ background: '#FFFDF5' }}
                   autoFocus
                 />
                 <button onClick={guardarDesc}
@@ -413,7 +413,7 @@ const TareaItem = ({ tarea, color, index, totalTareas, onCambiarEstado, onElimin
             {editandoFecha ? (
               <div className="flex gap-2 items-center">
                 <input type="datetime-local" value={fecha} onChange={e => setFecha(e.target.value)}
-                  className="text-sm border border-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" style={{ background: '#FFFBF0' }} />
+                  className="text-sm border border-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" style={{ background: '#FFFDF5' }} />
                 <button onClick={guardarFecha}
                   className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 font-medium">
                   Guardar
@@ -640,8 +640,8 @@ const DashboardPage = () => {
   const cantidadSubcarpetasAEliminar = Math.max(0, idsCarpetaAEliminar.length - 1);
 
   return (
-    <div className="min-h-screen p-6" style={{ background: '#F7F8FA' }}>
-      <div className="flex h-[calc(100vh-48px)] overflow-hidden rounded-2xl shadow-sm" style={{ background: '#FFFBF0', border: '1px solid #E2E8F0' }}>
+    <div className="min-h-screen p-6" style={{ background: '#FFFEF9' }}>
+      <div className="flex h-[calc(100vh-48px)] overflow-hidden rounded-2xl shadow-sm" style={{ background: '#FFFDF5', border: '1px solid #E2E8F0' }}>
         <Sidebar
           carpetas={carpetas}
           carpetaSeleccionada={carpetaSeleccionada}
@@ -657,7 +657,7 @@ const DashboardPage = () => {
           {/* Área central */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {!carpetaSeleccionada ? (
-              <div className="h-full flex items-center justify-center" style={{ background: '#F7F8FA' }}>
+              <div className="h-full flex items-center justify-center" style={{ background: '#FFFEF9' }}>
                 <div className="text-center space-y-4">
                   <svg width="120" height="100" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="mx-auto">
                     <rect x="10" y="30" width="100" height="65" rx="6" fill="#E6FAF8" stroke="#14B8A6" strokeWidth="2"/>
@@ -675,8 +675,8 @@ const DashboardPage = () => {
                 </div>
               </div>
             ) : (
-              <div className="flex-1 flex flex-col overflow-hidden" style={{ background: '#F7F8FA' }}>
-                <div className="px-7 py-5 flex items-center gap-3" style={{ background: '#FFFBF0', borderBottom: '1px solid #E2E8F0' }}>
+              <div className="flex-1 flex flex-col overflow-hidden" style={{ background: '#FFFEF9' }}>
+                <div className="px-7 py-5 flex items-center gap-3" style={{ background: '#FFFDF5', borderBottom: '1px solid #E2E8F0' }}>
                   <span className="w-3.5 h-3.5 rounded-full flex-shrink-0" style={{ backgroundColor: carpetaActual?.color }} />
                   <h1 className="font-bold text-lg" style={{ color: '#0F172A' }}>{carpetaActual?.nombre}</h1>
                   <span className="ml-auto text-xs font-medium" style={{ color: '#64748B' }}>
@@ -685,7 +685,7 @@ const DashboardPage = () => {
                 </div>
 
                 <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
-                  <form onSubmit={handleCrearTarea} className="mb-4 rounded-xl p-5" style={{ background: '#FFFBF0', border: '1px solid #E2E8F0' }}>
+                  <form onSubmit={handleCrearTarea} className="mb-4 rounded-xl p-5" style={{ background: '#FFFDF5', border: '1px solid #E2E8F0' }}>
                     <div className="flex flex-col gap-3 lg:flex-row">
                       <input
                         type="text"
@@ -693,21 +693,21 @@ const DashboardPage = () => {
                         onChange={e => setNuevaTarea(e.target.value)}
                         placeholder="Agregar nueva tarea..."
                         className="min-w-0 flex-1 text-sm rounded-lg px-4 py-3 focus:outline-none"
-                        style={{ border: '1px solid #E2E8F0', background: '#F7F8FA', color: '#0F172A' }}
+                        style={{ border: '1px solid #E2E8F0', background: '#FFFEF9', color: '#0F172A' }}
                       />
                       <input
                         type="datetime-local"
                         value={nuevaFechaVencimiento}
                         onChange={e => setNuevaFechaVencimiento(e.target.value)}
                         className="lg:w-56 text-sm rounded-lg px-4 py-3 focus:outline-none"
-                        style={{ border: '1px solid #E2E8F0', background: '#F7F8FA', color: '#64748B' }}
+                        style={{ border: '1px solid #E2E8F0', background: '#FFFEF9', color: '#64748B' }}
                         title="Fecha y hora para mostrar en calendario"
                       />
                       <button
                         type="button"
                         onClick={() => setMostrarDetallesNuevaTarea(prev => !prev)}
                         className="lg:w-28 text-sm rounded-lg px-4 py-3 font-medium transition-colors"
-                        style={{ border: '1px solid #E2E8F0', color: '#64748B', background: '#F7F8FA' }}
+                        style={{ border: '1px solid #E2E8F0', color: '#64748B', background: '#FFFEF9' }}
                       >
                         Detalles
                       </button>
@@ -724,7 +724,7 @@ const DashboardPage = () => {
                         placeholder="Temas, subtareas o informacion extra (un item por linea)..."
                         rows={3}
                         className="mt-4 w-full text-sm rounded-lg px-4 py-3 focus:outline-none resize-none"
-                        style={{ border: '1px solid #E2E8F0', background: '#F7F8FA', color: '#0F172A' }}
+                        style={{ border: '1px solid #E2E8F0', background: '#FFFEF9', color: '#0F172A' }}
                       />
                     )}
                   </form>
@@ -772,7 +772,7 @@ const DashboardPage = () => {
             className={`fixed md:static inset-y-0 right-0 z-40 w-80 h-full flex-shrink-0 flex flex-col overflow-hidden transition-transform duration-300 ${
               panelDerechoAbierto ? 'translate-x-0' : 'translate-x-full md:translate-x-0'
             }`}
-            style={{ background: '#FFFBF0', borderLeft: '1px solid #E2E8F0' }}
+            style={{ background: '#FFFDF5', borderLeft: '1px solid #E2E8F0' }}
           >
             {carpetaSeleccionada ? (
               <>
@@ -790,7 +790,7 @@ const DashboardPage = () => {
                     onChange={e => setContenidoNota(e.target.value)}
                     placeholder="Escribe tus ideas..."
                     className="flex-1 px-6 py-5 text-sm resize-none focus:outline-none"
-                    style={{ color: '#0F172A', background: '#FFFBF0' }}
+                    style={{ color: '#0F172A', background: '#FFFDF5' }}
                   />
                   <div className="px-6 py-3 flex items-center gap-1.5" style={{ borderTop: '1px solid #F8FAFC' }}>
                     <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#14B8A6' }} />
@@ -833,7 +833,7 @@ const DashboardPage = () => {
           onClick={cerrarModalEliminarCarpeta}
         >
           <div
-            className="w-full max-w-md rounded-2xl border border-slate-100 p-7 shadow-2xl" style={{ background: '#FFFBF0' }}
+            className="w-full max-w-md rounded-2xl border border-slate-100 p-7 shadow-2xl" style={{ background: '#FFFDF5' }}
             onClick={e => e.stopPropagation()}
           >
             <div className="flex items-start gap-4">
@@ -890,7 +890,7 @@ const DashboardPage = () => {
           {mostrarFAB && (
             <form onSubmit={handleCrearCarpetaFAB}
               className="absolute bottom-16 right-0 rounded-2xl shadow-2xl p-6 w-72"
-              style={{ background: '#FFFBF0', border: '1px solid #E2E8F0' }}>
+              style={{ background: '#FFFDF5', border: '1px solid #E2E8F0' }}>
               <p className="text-xs font-bold mb-3 uppercase tracking-wider" style={{ color: '#0F172A' }}>Nueva carpeta</p>
               <input
                 type="text"
@@ -900,13 +900,13 @@ const DashboardPage = () => {
                 placeholder="Nombre..."
                 autoFocus
                 className="w-full text-sm rounded-lg px-4 py-2.5 mb-3 focus:outline-none"
-                style={{ border: '1px solid #E2E8F0', background: '#F7F8FA', color: '#0F172A' }}
+                style={{ border: '1px solid #E2E8F0', background: '#FFFEF9', color: '#0F172A' }}
               />
               <select
                 value={parentFAB}
                 onChange={e => setParentFAB(e.target.value === 'root' ? 'root' : Number(e.target.value))}
                 className="w-full text-sm rounded-lg px-4 py-2.5 mb-4 focus:outline-none"
-                style={{ border: '1px solid #E2E8F0', background: '#F7F8FA', color: '#64748B' }}
+                style={{ border: '1px solid #E2E8F0', background: '#FFFEF9', color: '#64748B' }}
               >
                 <option value="root">Carpeta principal</option>
                 {opcionesCarpetas().map(c => (
